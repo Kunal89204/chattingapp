@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-bg{
+    background-image: url('./assets//bg.jpg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+@media only screen and (max-width:1024px){
+    .custom-bg{
+        background-image: url('./assets//bg.jpg');
+        background-size: 150% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    
+}
+
+
+*::-webkit-scrollbar{
+    background: rgb(99, 99, 99);
+    width: 0px;
+}
+
+*::-webkit-scrollbar-thumb{
+    background: black;
+}

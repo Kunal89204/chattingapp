@@ -1,0 +1,111 @@
+import React, { useEffect, useState, useRef } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { socket } from '../App';
+import { useAuthStore } from '../context/store';
+import axios from 'axios';
+import { FaArrowLeft } from 'react-icons/fa';
+
+const PrivateChat = () => {
+  const { userId1, userId2 } = useParams();
+  const { user } = useAuthStore();
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState('');
+  const [userinfo, setUserinfo] = useState({});
+  const messagesEndRef = useRef(null);
+
+  const username = user?.user?.username;
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const fetchUserData = async () => {
+    try {
+      const respo = await axios.get(`http://localhost:8000/api/v1/userinfo/${userId2}`);
+      setUserinfo(respo.data);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const fetchChats = async (room) => {
+    try {
+      console.log('Fetching chats for room:', room);
+      const respo = await axios.get(`http://localhost:8000/api/v1/getchats/${room}`);
+      console.log('Chat response:', respo.data);
+      setMessages(respo.data);
+    } catch (error) {
+      console.error('Error fetching chats:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+    const room = [userId1, userId2].sort().join('-');
+    socket.emit('joinRoom', { room });
+    fetchChats(room);
+
+    socket.on('message', (msg) => {
+      setMessages((prevMessages) => [...prevMessages, msg]);
+    });
+
+    return () => {
+      socket.emit('leaveRoom', { room });
+      socket.off('message');
+    };
+  }, [userId1, userId2]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleMessageSend = () => {
+    if (message.trim() !== '') {
+      const room = [userId1, userId2].sort().join('-');
+      socket.emit('message', { room, text: message, username });
+      setMessage('');
+    }
+  };
+
+  return (
+    <div className="h-screen bg-black custom-bg">
+      <h1 className="backdrop-blur-lg text-2xl text-center capitalize py-2">
+        <Link className="absolute left-5" to="/">
+          <FaArrowLeft />
+        </Link>
+        {userinfo.username}
+      </h1>
+      <div className="flex flex-col mb-4 overflow-y-auto h-[80vh] px-4">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`mb-2 max-w-[70vw] break-words p-2 rounded-lg ${msg.sender.username === username ? 'bg-blue-500 text-white self-end -translate-x-4' : 'bg-gray-300 self-start'
+              }`}
+          >
+            <strong className="text-sm">
+              {msg.sender.username === username ? 'You' : msg.sender.username}
+            </strong>
+            <div>{msg.message}</div>
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+
+      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-5">
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className="border-2 p-2 w-[50vw] rounded bg-gray-800 text-white"
+        />
+        <button onClick={handleMessageSend} className="bg-orange-500 text-white py-2 px-8 rounded">
+          Send
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default PrivateChat;
