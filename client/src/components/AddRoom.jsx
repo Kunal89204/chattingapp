@@ -9,7 +9,7 @@ const AddRoom = ({ closeModal }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log({ roomname, user: user.user._id })
-    axios.post(`http://localhost:8000/api/v1/addroom/${user.user._id}`, { groupName: roomname })
+    axios.post(`https://chattarpattarkabackend.onrender.com/api/v1/addroom/${user.user._id}`, { groupName: roomname })
       .then((respo) => {
         console.log('room created', respo.data)
         closeModal()

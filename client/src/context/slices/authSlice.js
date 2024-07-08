@@ -18,7 +18,7 @@ export const createAuthSlice = (set) => ({
     
         if (user && user.accessToken) {
           try {
-            const response = await axios.get('http://localhost:8000/api/v1/validate-token', {
+            const response = await axios.get('https://chattarpattarkabackend.onrender.com/api/v1/validate-token', {
               headers: {
                 Authorization: `Bearer ${user.accessToken}`,
               },

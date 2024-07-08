@@ -24,7 +24,7 @@ const GroupChat = () => {
 
 
   const fetchRoomChats = () => {
-    axios.get(`http://localhost:8000/api/v1/roomchats/${groupId}`)
+    axios.get(`https://chattarpattarkabackend.onrender.com/api/v1/roomchats/${groupId}`)
     .then((respo) => {
       setMessages(respo.data)
     })

@@ -6,7 +6,7 @@ const useRegister = () => {
     const {login}  = useAuthStore()
 
     const registerHook = (data) => {
-        axios.post('http://localhost:8000/api/v1/register', data)
+        axios.post('https://chattarpattarkabackend.onrender.com/api/v1/register', data)
         .then((respo) => {
             if (respo.data.accessToken) {
                 console.log(respo.data.accessToken)

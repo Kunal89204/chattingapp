@@ -15,7 +15,7 @@ const Home = () => {
 
   useEffect(() => {
     if (user && user.accessToken) {
-      axios.get('http://localhost:8000/api/v1/testroute', {
+      axios.get('https://chattarpattarkabackend.onrender.com/api/v1/testroute', {
         headers: {
           Authorization: `Bearer ${user.accessToken}`
         }
@@ -31,7 +31,7 @@ const Home = () => {
   }, [user]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/v1/getrooms')
+    axios.get('https://chattarpattarkabackend.onrender.com/api/v1/getrooms')
       .then((respo) => {
         setRooms(respo.data)
       })

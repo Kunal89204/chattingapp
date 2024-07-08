@@ -7,7 +7,7 @@ const useLogin = () => {
 
     const loginHook = (data) => {
         
-        axios.post('http://localhost:8000/api/v1/login', data)
+        axios.post('https://chattarpattarkabackend.onrender.com/api/v1/login', data)
         .then((respo) => {
             if (respo.data.accessToken) {
                 console.log(respo.data.accessToken)

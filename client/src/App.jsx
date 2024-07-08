@@ -12,7 +12,7 @@ import Navbar from './components/Navbar';
 
 
 
-export const socket = io("http://localhost:8000")
+export const socket = io("https://chattarpattarkabackend.onrender.com")
 
 const App = () => {
   const {validateToken} = useAuthStore()

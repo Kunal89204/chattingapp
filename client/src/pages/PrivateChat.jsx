@@ -23,7 +23,7 @@ const PrivateChat = () => {
 
   const fetchUserData = async () => {
     try {
-      const respo = await axios.get(`http://localhost:8000/api/v1/userinfo/${userId2}`);
+      const respo = await axios.get(`https://chattarpattarkabackend.onrender.com/api/v1/userinfo/${userId2}`);
       setUserinfo(respo.data);
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -33,7 +33,7 @@ const PrivateChat = () => {
   const fetchChats = async (room) => {
     try {
       console.log('Fetching chats for room:', room);
-      const respo = await axios.get(`http://localhost:8000/api/v1/getchats/${room}`);
+      const respo = await axios.get(`https://chattarpattarkabackend.onrender.com/api/v1/getchats/${room}`);
       console.log('Chat response:', respo.data);
       setMessages(respo.data);
     } catch (error) {
